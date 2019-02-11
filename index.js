@@ -28,6 +28,7 @@ app.get('/api/persons', (req, res) => {
   Person.find({}).then(dbRes => {
     res.json(dbRes.toJSON())
   }).catch(e => console.log(e))
+  res.status(500).end()
 })
 app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
