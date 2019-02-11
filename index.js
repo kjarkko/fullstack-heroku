@@ -46,9 +46,15 @@ app.get('/api/persons/:id', (req, res) => {
     return res.status(404).end()*/
 })
 app.delete('/api/persons/:id', (req,res) => {
-  const id = Number(req.params.id)
+  Person.findByIdAndRemove(req.params.id).then(r => {
+    res.status(204).end()
+  }).catch(e => {
+    console.log('error in DELETE /api/persons/:id', e)
+    res.status(500).end()
+  })
+  /*const id = Number(req.params.id)
   Person.findByIdAndDelete(id)
-  res.status(204).end()
+  res.status(204).end()*/
 })
 app.post('/api/persons/', (req,res) => {
   const data = req.body
