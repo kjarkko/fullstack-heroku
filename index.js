@@ -57,7 +57,7 @@ app.post('/api/persons/', (req,res) => {
     name: data.name
   })
 
-  if(!person.number || !person.name || persons.filter(p => p.name === name).length > 0){
+  if(!person.number || !person.name){
     res.status(400).end()
   }
   person.save().then(saved => {
