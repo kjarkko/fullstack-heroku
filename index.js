@@ -4,6 +4,11 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
+const personSchema = new mongoose.Schema({ name: String,number: String })
+const Person = mongoose.model('Person', personSchema)
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -18,33 +23,14 @@ app.use(morgan(function (tokens, req, res) {
 }))
 app.use(express.static('build'))
 
-let persons = [
-    {
-      name: "blaalbla",
-      number: "4645",
-      id: 3
-    },
-    {
-      name: "nimi",
-      number: "numero",
-      id: 4
-    }
-]
 
-
-app.get('/', (req,res) => {
-  res.send('<h1>hello world<h1>')
-})
-
-
-app.get('/info', (req, res) => {
-  res.send(`<p>Puhelinluettelossa ${persons.length} henkilön tiedot <br/> ${new Date().toLocaleDateString('en-US')} </p>`)
-})
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(dbRes => {
+    res.json(dbRes.toJSON())
+  }).catch(e => console.log(e))
+  res.json(database.all())
 })
-
 app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   const hlo = persons.find((p) => p.id == id)
@@ -53,13 +39,11 @@ app.get('/api/persons/:id', (req, res) => {
   else 
     return res.status(404).end()
 })
-
 app.delete('/api/persons/:id', (req,res) => {
   const id = Number(req.params.id)
   persons = persons.filter(p => p.id !== id)
   res.status(204).end()
 })
-
 app.post('/api/persons/', (req,res) => {
   const data = req.body
   const number = data.number
@@ -80,6 +64,8 @@ app.post('/api/persons/', (req,res) => {
   persons.push(person)
   res.status(201).end()
 })
+
+
 
 const port = process.env.PORT || 3001
 app.listen(port)
