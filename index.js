@@ -60,11 +60,13 @@ app.delete('/api/persons/:id', (req,res) => {
   res.status(204).end()
 })
 
-app.post('/api/persons/:number/:name', (req,res) => {
-  const number = req.params.number
-  const name = req.params.name
+app.post('/api/persons/', (req,res) => {
+  const data = req.body
+  const number = data.number
+  const name = data.name
+  console.log(number, name)
 
-  if(!number || !name || persons.filter(p => p.name === name) != []){
+  if(!number || !name || persons.filter(p => p.name === name).length > 0){
     res.status(400).end()
   }
 
