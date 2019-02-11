@@ -78,6 +78,7 @@ app.post('/api/persons/', (req,res) => {
   }
   persons.filter(p => p.name === name)
   persons.push(person)
+  res.status(201).end()
 })
 
 const port = process.env.PORT || 3001
