@@ -7,7 +7,7 @@ mongoose.connect(
 	process.env.MONGODB_URI, { useNewUrlParser: true }
 ).then(r => console.log('connected')).catch(e => console.log('failed:',e))
 
-const personSchema = new mongoose.Schema({ name: String,number: String })
+const personSchema = new mongoose.Schema({ name: String, number: String })
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {

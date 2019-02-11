@@ -26,7 +26,9 @@ app.use(express.static('build'))
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(people => {
-    res.json(people.map(p => p.toJSON))
+    const data = people.map(p => p.toJSON)
+    console.log('data',data)
+    res.json(data)
   }).catch(e => {
     console.log('error in GET /api/persons/:', e)
     res.status(500).end()
