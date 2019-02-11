@@ -1,15 +1,13 @@
-require('dotenv').config()
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config()
+}
 const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
-const personSchema = new mongoose.Schema({ name: String,number: String })
-const Person = mongoose.model('Person', personSchema)
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -30,7 +28,6 @@ app.get('/api/persons', (req, res) => {
   Person.find({}).then(dbRes => {
     res.json(dbRes.toJSON())
   }).catch(e => console.log(e))
-  res.json(database.all())
 })
 app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
@@ -68,6 +65,6 @@ app.post('/api/persons/', (req,res) => {
 
 
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT
 app.listen(port)
 console.log(`server running on ${port}`)
