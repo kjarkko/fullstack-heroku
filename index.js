@@ -26,21 +26,24 @@ app.use(express.static('build'))
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(people => {
-    const data = people.map(p => p.toJSON())
-    console.log('data',data)
-    res.json(data)
+    res.json(people.map(p => p.toJSON()))
   }).catch(e => {
-    console.log('error in GET /api/persons/:', e)
+    console.log('error in GET /api/persons/', e)
     res.status(500).end()
   })
 })
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
+  Person.findById(req.params.id).then(person => {
+    res.json(person.toJSON())
+  }).catch(e => {
+    console.log('error in GET /api/persons/:id', e)
+  })
+  /*const id = Number(req.params.id)
   const hlo = persons.find((p) => p.id == id)
   if(hlo)
     res.send(hlo)
   else 
-    return res.status(404).end()
+    return res.status(404).end()*/
 })
 app.delete('/api/persons/:id', (req,res) => {
   const id = Number(req.params.id)
