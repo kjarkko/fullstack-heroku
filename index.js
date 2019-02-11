@@ -26,7 +26,7 @@ app.use(express.static('build'))
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(people => {
-    const data = people.map(p => p.toJSON)
+    const data = people.map(p => p.toJSON())
     console.log('data',data)
     res.json(data)
   }).catch(e => {
