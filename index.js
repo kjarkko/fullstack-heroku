@@ -52,23 +52,17 @@ app.delete('/api/persons/:id', (req,res) => {
 })
 app.post('/api/persons/', (req,res) => {
   const data = req.body
-  const number = data.number
-  const name = data.name
-  console.log(number, name)
+  const person = new Person({
+    number: data.number,
+    name: data.name
+  })
 
-  if(!number || !name || persons.filter(p => p.name === name).length > 0){
+  if(!person.number || !person.name || persons.filter(p => p.name === name).length > 0){
     res.status(400).end()
   }
-
-  const id = Math.random() * 1000000000
-  const person = {
-    number: number,
-    name: name,
-    id: id
-  }
-  persons.filter(p => p.name === name)
-  persons.push(person)
-  res.status(201).end()
+  person.save().then(saved => {
+    res.json(saved.toJSON())
+  }).catch(e => console.log('error in POST /api/persons/', e))
 })
 
 
