@@ -10,6 +10,7 @@ morgan.token('data', req => JSON.stringify(req.body))
 api.use(cors())
 api.use(express.json())
 api.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
+api.use(express.static('build'))
 
 let persons = [
     {
